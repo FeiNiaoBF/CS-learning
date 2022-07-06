@@ -134,7 +134,7 @@ public class ArrayDeque<T> {
 
         } else if (front > rear) {
             for (int i = front; i < maxObject; i++) {
-                System.out.print(array[i]);
+                System.out.print(array[i] + " ");
             }
             for (int i = 0; i < rear; i++) {
                 if (i == rear - 1) {
