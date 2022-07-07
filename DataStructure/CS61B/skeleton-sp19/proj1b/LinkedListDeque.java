@@ -1,153 +1,148 @@
-import org.w3c.dom.Node;
-
 /**
- * CS61B-pro1a
- * Array bacis List
- * 
- * @author Yeelight
+ * Deque (usually pronounced like “deck”) is an irregular acronym of
+ * double-ended queue. Double-ended queues are sequence containers with dynamic
+ * sizes that can be expanded or contracted on both ends (either its front or
+ * its back).
  */
-
-public class LinkedListDeque<T> {
-    /* 双端节点类 */
-    public class Node {
-        /* 节点数据 */
-        private T node;
-        /* 节点的前端 */
+public class LinkedListDeque<T> implements Deque<T> {
+    private class Node {
         private Node prev;
-        /* 节点的后继 */
+        private T item;
         private Node next;
 
-        /* 构造节点 */
-        public Node(Node pPrev, T a, Node nNext) {
-            node = a;
-            prev = pPrev;
-            next = nNext;
-        }
-
-        /* 指针节点 */
-        public Node(Node pPrev, Node nNxet) {
-            prev = pPrev;
-            next = nNxet;
+        Node(LinkedListDeque<T>.Node prev, T item, LinkedListDeque<T>.Node next) {
+            this.prev = prev;
+            this.item = item;
+            this.next = next;
         }
     }
 
-    /* 双端节点数据结构 */
-    private Node pointerHead;
-    private Node pointerTail;
+    private Node sentinel;
     private int size;
-    private int MAXNUM = 100;
 
-    // 构造方法 使用双指针
     public LinkedListDeque() {
-        pointerHead = new Node(null, null);
-        pointerTail = new Node(pointerHead, null);
-        pointerHead.next = pointerTail;
+        sentinel = new Node(null, (T) new Object(), null);
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
         size = 0;
     }
 
     /**
-     * public void addFirst(T item)T：在双端队列的前面添加一个类型的项目。
-     * public void addLast(T item)T：在双端队列的后面添加一个类型的项目。
-     * public boolean isEmpty(): 如果 deque 为空，则返回 true，否则返回 false。
-     * public int size()：返回双端队列中的项目数。
-     * public void printDeque()：从头到尾打印双端队列中的项目，用空格分隔。打印完所有项目后，打印出一个新行。
-     * public T removeFirst()：删除并返回双端队列前面的项目。如果不存在这样的项目，则返回 null。
-     * public T removeLast()：删除并返回双端队列后面的项目。如果不存在这样的项目，则返回 null。
-     * public T get(int index)：获取给定索引处的项目，其中 0 是前面，1 是下一个项目，依此类推。
-     * 如果不存在这样的项目，则返回null。不能改变双端队列！
-     * 
+     * Adds an item of type T to the front of the deque.
      */
     @Override
     public void addFirst(T item) {
-        Node newnode = new Node(null, item, null);
-        // 顺序不要乱，从后向前 ！！！不要把指向覆盖！！！
-        this.pointerHead.next.prev = newnode;
-        newnode.next = this.pointerHead.next;
-        this.pointerHead.next = newnode;
-        newnode.prev = this.pointerHead;
+        Node newNode = new Node(sentinel, item, sentinel.next);
+        sentinel.next.prev = newNode;
+        sentinel.next = newNode;
         size++;
     }
 
+    /**
+     * Adds an item of type T to the back of the deque.
+     */
     @Override
     public void addLast(T item) {
-        Node newnode = new Node(null, null);
-        // 顺序不要乱，从前向后 ！！！不要把指向覆盖！！！
-        this.pointerTail.prev.next = newnode;
-        newnode.prev = this.pointerTail.prev;
-        this.pointerTail.prev = newnode;
-        newnode.next = this.pointerTail;
+        Node newNode = new Node(sentinel.prev, item, sentinel);
+        sentinel.prev.next = newNode;
+        sentinel.prev = newNode;
         size++;
     }
 
+    /**
+     * Returns true if deque is empty, false otherwise.
+     */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * Returns the number of items in the deque.
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * Prints the items in the deque from first to last, separated by a space.
+     */
+    @Override
+    public void printDeque() {
+        for (Node i = sentinel.next; i != sentinel; i = i.next) {
+            if (i.next == sentinel) {
+                System.out.println(i.item);
+                break;
+            }
+            System.out.print(i.item + " ");
+        }
+    }
+
+    /**
+     * Removes and returns the item at the front of the deque. If no such item
+     * exists, returns null.
+     */
     @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
-        T couns = pointerHead.next.node;
-        pointerHead.next.next.prev = pointerHead;
-        pointerHead.next = pointerHead.next.next;
+        T res = sentinel.next.item;
+        sentinel.next = sentinel.next.next;
+        sentinel.next.prev = sentinel;
         size--;
-        return couns;
+        return res;
     }
 
+    /**
+     * Removes and returns the item at the back of the deque. If no such item
+     * exists, returns null.
+     */
     @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
         }
-        T couns = pointerTail.prev.node;
-        pointerTail.prev.prev.next = pointerTail;
-        pointerTail.prev = pointerTail.prev.prev;
+        T res = sentinel.prev.item;
+        sentinel.prev = sentinel.prev.prev;
+        sentinel.prev.next = sentinel;
         size--;
-        return couns;
+        return res;
     }
 
+    /**
+     * Gets the item at the given index, where 0 is the front, 1 is the next item,
+     * and so forth. If no such item exists, returns null. Must not alter the deque!
+     */
     @Override
     public T get(int index) {
-        if (index >= size) {
+        if (size < index) {
             return null;
         }
-        Node temp = pointerHead;
-        for (int i = 0; i <= index; i++) {
-            temp = temp.next;
+        Node p = sentinel.next;
+        while (index > 0) {
+            p = p.next;
+            index--;
         }
-        return temp.node;
+        return p.item;
     }
 
-    /* 递归 */
-    public T getRecursiveHelp(Node start, int index) {
-        int x = 1;
-        if (x == index) {
-            return start.node;
-        } else {
-            return getRecursiveHelp(start.next, x++);
-        }
-    }
-
+    /**
+     * Same as get, but uses recursion.
+     */
     public T getRecursive(int index) {
-        if (index >= size) {
+        if (size < index) {
             return null;
         }
-        return getRecursiveHelp(pointerHead.next, index);
+        return getRecursive(sentinel.next, index);
     }
 
-    @Override
-    public void printDeque() {
-        Node temp = pointerHead.next;
-        while (temp != pointerTail) {
-            System.out.println(temp.node);
-            temp = temp.next;
+    private T getRecursive(LinkedListDeque<T>.Node node, int i) {
+        if (i == 0) {
+            return node.item;
         }
+        return getRecursive(node.next, i - 1);
     }
+
 }

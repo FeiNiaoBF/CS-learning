@@ -1,4 +1,3 @@
-import org.w3c.dom.Node;
 
 /**
  * CS61B-pro1a
@@ -35,7 +34,6 @@ public class LinkedListDeque<T> {
     private Node pointerHead;
     private Node pointerTail;
     private int size;
-    private int MAXNUM = 100;
 
     // 构造方法 使用双指针
     public LinkedListDeque() {
