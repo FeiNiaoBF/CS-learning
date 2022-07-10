@@ -1,3 +1,5 @@
+import java.util.concurrent.LinkedBlockingDeque;
+
 public class ArrayDequeTest {
     /* Utility method for printing out empty checks. */
     public static boolean checkEmpty(boolean expected, boolean actual) {
@@ -57,9 +59,9 @@ public class ArrayDequeTest {
         ald1.addLast("back");
         passed = checkSize(3, ald1.size()) && passed;
 
-        passed = checkSize("front", ald1.getDate(0)) && passed;
-        passed = checkSize("middle", ald1.getDate(1)) && passed;
-        passed = checkSize("back", ald1.getDate(2)) && passed;
+        passed = checkSize("front", ald1.get(0)) && passed;
+        passed = checkSize("middle", ald1.get(1)) && passed;
+        passed = checkSize("back", ald1.get(2)) && passed;
         System.out.println("Printing out deque: ");
         ald1.printDeque();
 
@@ -76,7 +78,7 @@ public class ArrayDequeTest {
 
         System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
-        LinkedListDeque<Integer> ald1 = new LinkedListDeque<Integer>();
+        LinkedBlockingDeque<Integer> ald1 = new LinkedBlockingDeque<Integer>();
         // should be empty
         boolean passed = checkEmpty(true, ald1.isEmpty());
 

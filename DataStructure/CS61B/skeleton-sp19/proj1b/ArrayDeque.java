@@ -1,155 +1,159 @@
 /**
- * 基于数组的双端队列
- * 看成一个循环队列
+ * Deque implemented by array.
  */
 public class ArrayDeque<T> implements Deque<T> {
-    private T[] array; // 数组本身
-    private int front; // 顶部指针
-    private int rear; // 尾部指针
-    private int maxObject = 8;
+
+    private T[] items;
+    private int left;
+    private int right;
+    private int capacity = 8;
 
     public ArrayDeque() {
-        this.array = (T[]) new Object[maxObject];
-        this.front = 0;
-        this.rear = 0;
+        items = (T[]) (new Object[capacity]);
+        left = right = 0;
     }
 
+    /** Adds an item of type T to the front of the deque. */
     @Override
     public void addFirst(T item) {
         if (isFull()) {
-            reSize(maxObject * 2);
+            resize((int) (capacity * 1.5));
         }
-        // 减一是因为要在数组中向前插入数值，而front要向前一位；
-        // 对max进行取余则是让数组循环
-        front = (front - 1 + maxObject) % maxObject;
-        array[front] = item;
+        left = (left - 1 + capacity) % capacity;
+        items[left] = item;
     }
 
+    /** Adds an item of type T to the back of the deque. */
     @Override
     public void addLast(T item) {
         if (isFull()) {
-            reSize(maxObject * 2);
+            resize((int) (capacity * 1.5));
         }
-        array[rear] = item;
-        rear = (rear + 1 + maxObject) % maxObject;
+        items[right] = item;
+        right = (right + 1 + capacity) % capacity;
     }
 
+    /** Returns true if deque is empty, false otherwise. */
+    @Override
+    public boolean isEmpty() {
+        return left == right;
+    }
+
+    /** Returns the number of items in the deque. */
     @Override
     public int size() {
-        return (rear - front + maxObject) % maxObject;
+        return (right - left + capacity) % capacity;
     }
 
-    // 删除数值
-    // 节省空间，在大于25%的时候减少空间
+    /** Prints the items in the deque from first to last, separated by a space. */
+    @Override
+    public void printDeque() {
+        if (left < right) {
+            for (int i = left; i < right; i++) {
+                if (i == right - 1) {
+                    System.out.println(items[i]);
+                    break;
+                }
+                System.out.print(items[i] + " ");
+            }
+        } else if (left > right) {
+            for (int i = left; i < capacity; i++) {
+                System.out.print(items[i] + " ");
+            }
+            for (int i = 0; i < right; i++) {
+                if (i == right - 1) {
+                    System.out.println(items[i]);
+                    break;
+                }
+                System.out.print(items[i] + " ");
+            }
+        }
+    }
+
+    /**
+     * Removes and returns the item at the front of the deque. If no such item
+     * exists, returns null.
+     */
     @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
-        T res = array[front];
-        front = (front + 1 + maxObject) % maxObject;
-        if (isLow()) {
-            reSize((int) (maxObject * 0.25));
+        T res = items[left];
+        left = (left + 1) % capacity;
+        if (isLowUsageRate()) {
+            resize((int) (capacity * 0.5));
         }
         return res;
     }
 
+    /**
+     * Removes and returns the item at the back of the deque. If no such item
+     * exists, returns null.
+     */
     @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
         }
-        rear = (rear - 1 + maxObject) % maxObject;
-        T res = array[rear];
-        if (isLow()) {
-            reSize((int) (maxObject * 0.25));
+        right = (right - 1 + capacity) % capacity;
+        T res = items[right];
+        if (isLowUsageRate()) {
+            resize((int) (capacity * 0.5));
         }
         return res;
     }
 
-    // 获取指定下标的值
+    /**
+     * Gets the item at the given index, where 0 is the front, 1 is the next item,
+     * and so forth. If no such item exists, returns null. Must not alter the deque!
+     */
     @Override
     public T get(int index) {
         if (index < 0 || index >= size() || isEmpty()) {
             return null;
         }
-        if (front < rear) {
-            return array[index + front];
-        } else if (front > rear) {
-            return array[(index + front) % maxObject];
+        if (left < right) {
+            return items[index + left];
+        } else if (left > right) {
+            if (index + left < capacity) {
+                return items[index + left];
+            } else {
+                return items[(index + left) % capacity];
+            }
         }
         return null;
     }
 
-    /*
-     * 打印数值有两种情况
-     * 1.当front的值小于rear时，此时应该从front开始到rear结束
-     * 2.当rear的值小于front时，此时应该也从front开始但是要
-     */
-
-    @Override
-    public void printDeque() {
-        if (front < rear) {
-            for (int i = front; i < rear; i++) {
-                if (i == rear - 1) {
-                    System.out.println(array[i]);
-                    break;
-                }
-                System.out.print(array[i] + " ");
-            }
-
-        } else if (front > rear) {
-            for (int i = front; i < maxObject; i++) {
-                System.out.print(array[i] + " ");
-            }
-            for (int i = 0; i < rear; i++) {
-                if (i == rear - 1) {
-                    System.out.println(array[i]);
-                    break;
-                }
-                System.out.print(array[i] + " ");
-            }
-        }
-    }
-
-    // boolen
-
-    public boolean isEmpty() {
-        return this.front == this.rear;
-    }
-
     private boolean isFull() {
-        return size() == maxObject - 1;
+        return size() == capacity - 1;
     }
 
-    private boolean isLow() {
-        return maxObject >= 16 && size() / (double) maxObject < 0.25;
+    private boolean isLowUsageRate() {
+        return capacity >= 16 && size() / (double) capacity < 0.25;
     }
 
-    // 变更数组大小
-
-    private void reSize(int newSize) {
+    private void resize(int newSize) {
         T[] newArray = (T[]) new Object[newSize];
 
-        int size = this.size();
-        if (front < rear) {
-            for (int i = front, j = 0; i < rear && j < size; i++, j++) {
-                newArray[j] = array[i];
+        int size = size();
+        if (left < right) {
+            for (int i = left, j = 0; i < right && j < size; i++, j++) {
+                newArray[j] = items[i];
             }
-
-        } else if (front > rear) {
-
-            for (int i = rear, j = 0; i < maxObject && j < size; i++, j++) {
-                newArray[j] = array[i];
+        } else if (left > right) {
+            int j = 0;
+            for (int i = left; j < capacity - left; i++, j++) {
+                newArray[j] = items[i];
             }
-            for (int i = 0, j = 0; i < rear && j < size; i++, j++) {
-                newArray[j] = array[i];
+            for (int i = 0; j < size; i++, j++) {
+                newArray[j] = items[i];
             }
-            front = 0;
-            rear = size;
-            array = newArray;
-            maxObject = newSize;
         }
+        left = 0;
+        right = size;
+        items = newArray;
+        capacity = newSize;
     }
 
 }

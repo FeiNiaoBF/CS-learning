@@ -11,7 +11,7 @@ public class ArrayDeque<T> {
     private int maxObject = 8;
 
     public ArrayDeque() {
-        this.array = (T[]) new Object[maxObject];
+        this.array = (T[]) (new Object[maxObject]);
         this.lenght = maxObject;
         this.front = 0;
         this.rear = 0;
@@ -54,7 +54,7 @@ public class ArrayDeque<T> {
 
     // 变更数组大小
     private void reSize(int newSize) {
-        T[] newArray = (T[]) new Object[newSize];
+        T[] newArray = (T[]) (new Object[newSize]);
 
         int size = this.size();
         if (front < rear) {
@@ -144,5 +144,14 @@ public class ArrayDeque<T> {
                 System.out.print(array[i] + " ");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        ArrayDeque<Integer> array = new ArrayDeque<>();
+        array.addLast(2);
+        array.addLast(4);
+        array.addLast(6);
+        array.addLast(15);
+        array.printDeque();
     }
 }

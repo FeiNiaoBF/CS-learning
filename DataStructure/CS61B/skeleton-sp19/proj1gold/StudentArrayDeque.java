@@ -1,5 +1,5 @@
 public class StudentArrayDeque<T> {
-    private T[] a = (T[]) (new Object[8]);
+    private T[] a = (T[]) new Object[8];
     private int b = 8;
     private int c = 0;
     private int d = 4;

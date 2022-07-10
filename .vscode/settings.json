@@ -1,6 +1,7 @@
 {
     "java.project.sourcePaths": [
+        "DataStructure/CS61B/skeleton-sp19/proj1b",
         "DataStructure/CS61B/skeleton-sp19/proj1a",
-        "DataStructure/CS61B/skeleton-sp19/proj1b"
+        "DataStructure/CS61B/skeleton-sp19/lab3/Flik"
     ]
 }
