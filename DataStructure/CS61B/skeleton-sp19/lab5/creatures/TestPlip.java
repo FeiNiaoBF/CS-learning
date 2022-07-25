@@ -1,4 +1,5 @@
 package creatures;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.HashMap;
@@ -9,8 +10,10 @@ import huglife.Occupant;
 import huglife.Impassible;
 import huglife.Empty;
 
-/** Tests the plip class
- *  @authr FIXME
+/**
+ * Tests the plip class
+ * 
+ * @authr FIXME
  */
 
 public class TestPlip {
@@ -33,9 +36,18 @@ public class TestPlip {
     @Test
     public void testReplicate() {
         // TODO
+        Plip p = new Plip(2);
+        Plip subP = p.replicate();
+        assertEquals(1.0, p.energy(), 0.01);
+        assertEquals(1.0, subP.energy(), 0.01);
+        assertFalse(p == subP);
+        subP = subP.replicate();
+        assertEquals(1.0, p.energy(), 0.01);
+        assertEquals(0.5, subP.energy(), 0.01);
+
     }
 
-    //@Test
+    @Test
     public void testChoose() {
 
         // No empty adjacent spaces; stay.
@@ -51,7 +63,6 @@ public class TestPlip {
 
         assertEquals(expected, actual);
 
-
         // Energy >= 1; replicate towards an empty space.
         p = new Plip(1.2);
         HashMap<Direction, Occupant> topEmpty = new HashMap<Direction, Occupant>();
@@ -64,7 +75,6 @@ public class TestPlip {
         expected = new Action(Action.ActionType.REPLICATE, Direction.TOP);
 
         assertEquals(expected, actual);
-
 
         // Energy >= 1; replicate towards an empty space.
         p = new Plip(1.2);
@@ -79,7 +89,6 @@ public class TestPlip {
 
         assertNotEquals(unexpected, actual);
 
-
         // Energy < 1; stay.
         p = new Plip(.99);
 
@@ -87,7 +96,6 @@ public class TestPlip {
         expected = new Action(Action.ActionType.STAY);
 
         assertEquals(expected, actual);
-
 
         // Energy < 1; stay.
         p = new Plip(.99);
@@ -97,7 +105,7 @@ public class TestPlip {
 
         assertEquals(expected, actual);
 
-
-        // We don't have Cloruses yet, so we can't test behavior for when they are nearby right now.
+        // We don't have Cloruses yet, so we can't test behavior for when they are
+        // nearby right now.
     }
 }

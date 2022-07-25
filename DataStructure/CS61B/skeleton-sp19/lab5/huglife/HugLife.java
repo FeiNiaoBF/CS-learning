@@ -154,9 +154,9 @@ public class HugLife {
             System.out.println("Usage: java huglife.HugLife [worldname]");
             return;
         }
-        HugLife h = readWorld(args[0]);
-        // HugLife h = new HugLife(WORLD_SIZE);
-        // h.initialize(args[0]); DON'T USE ME
+          HugLife h = readWorld(args[0]);
+         //HugLife h = new HugLife(WORLD_SIZE);
+         //h.initialize(args[0]);// DON'T USE ME
 
         if (SIMULATE_BY_CYCLE) {
             h.simulate(MAX_CYCLES);
