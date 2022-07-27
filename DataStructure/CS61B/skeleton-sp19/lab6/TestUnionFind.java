@@ -33,6 +33,7 @@ public class TestUnionFind {
         uf.union(1, 5);
         assertEquals(6, uf.sizeOf(5));
         assertEquals(3, uf.find(5));
+        assertEquals(3, uf.parent(5));
         assertTrue(uf.connected(1, 3));
 
     }
