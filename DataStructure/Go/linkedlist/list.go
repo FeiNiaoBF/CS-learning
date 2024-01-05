@@ -10,26 +10,26 @@ type node struct {
 	data interface{}
 	next *node
 }
-func newLinkNode(data interface{}) *node{
+
+func newLinkNode(data interface{}) *node {
 	return &node{
-		data : data,
-		next : nil,
+		data: data,
+		next: nil,
 	}
 }
 
 type LinkedList struct {
-	head  *node
-	size  uint
+	head *node
+	size uint
 }
+
 // NewLinkedList create a linked list
 func NewLinkedList() *LinkedList {
 	return &LinkedList{
-		head : nil,
+		head: nil,
 		size: 0,
 	}
 }
-
-
 
 /// Public function of linked list
 
@@ -43,17 +43,17 @@ func (list *LinkedList) Insert(data int) *LinkedList {
 	newNode := newLinkNode(data)
 	newNode.next = list.head
 	list.head = newNode
-	list.size+=1
+	list.size += 1
 	return list
 }
 
 // RemoveHead delete head node at the linked list
-func (list *LinkedList) RemoveHead(){
-	if list.head == nil{
+func (list *LinkedList) RemoveHead() {
+	if list.head == nil {
 		return
 	}
 	list.head = list.head.next
-	list.size-=1
+	list.size -= 1
 }
 
 // RemoveItem delete the n node
@@ -69,7 +69,7 @@ func (list *LinkedList) RemoveItem(n *node) {
 	for cur.next != nil {
 		if cur.next == n {
 			cur.next = cur.next.next
-			list.size-=1
+			list.size -= 1
 			return
 		}
 		cur = cur.next
@@ -78,12 +78,12 @@ func (list *LinkedList) RemoveItem(n *node) {
 
 // Find find the node
 func (list *LinkedList) Find(data int) *node {
-	if list.head == nil{
+	if list.head == nil {
 		return nil
 	}
 	cur := list.head
-	for cur != nil{
-		if cur.data == data{
+	for cur != nil {
+		if cur.data == data {
 			return cur
 		}
 		cur = cur.next
