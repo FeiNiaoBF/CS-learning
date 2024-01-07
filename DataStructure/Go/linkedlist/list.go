@@ -110,3 +110,22 @@ func (list *LinkedList) Print() string {
 	// fmt.Println(format)
 	return format
 }
+
+
+/// Alogrithm of linked list
+
+// Reverse reverse the linked list
+func (list *LinkedList) Reverse() {
+	if list.head == nil || list.head.next == nil { // p || p->next is nil
+		return
+	}
+	var pre *node = nil
+	cur := list.head
+	for cur != nil {
+		next := cur.next
+		cur.next = pre  // 指向前一个节点
+		pre = cur		// 前一个节点后移
+		cur = next
+	}
+	list.head = pre
+}
