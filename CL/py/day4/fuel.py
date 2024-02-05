@@ -25,3 +25,4 @@ def fuel_gauge(fuel):
 
 if __name__ == "__main__":
     main()
+ 
