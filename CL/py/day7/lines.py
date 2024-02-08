@@ -13,13 +13,15 @@ def main():
         except FileNotFoundError:
             sys.exit("File does not exist")
         else:
-            with open(file_path, "r") as file:
+            with open(file_path, "r",encoding='utf-8') as file:
                 print(get_line_number(file))
 
 def get_line_number(file_path):
     line_num = 0
     for line in file_path:
-        if line.rstrip().startswith("#") or line.rstrip() == "":
+        if line.rstrip().startswith("#") or line.rstrip() == "" or line.rstrip().startswith(" #"):
+            continue
+        if line.rstrip().startswith('\n'):
             continue
         else:
             line_num += 1
