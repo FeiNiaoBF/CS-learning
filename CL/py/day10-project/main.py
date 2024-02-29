@@ -20,7 +20,10 @@ logging.basicConfig(
 
 
 def main():
-    bot_start()
+    try:
+        bot_start()
+    except Ellipsis as e:
+        sys.exit("Error: " + str(e))
 
 def bot_start():
     # get TOKEN
@@ -65,7 +68,10 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
 
 
-# Weather
+'''
+    Weather Mod
+'''
+
 def get_weather():
     api_key = get_API(1)
     city = get_API(2)
@@ -90,6 +96,13 @@ def get_weather_data(data):
                 ☀️Weather Report: {report[0]['description']}"
     except Ellipsis as e:
         return "Error: " + str(e)
+
+'''
+    Punch in Mod
+'''
+
+
+
 
 
 def get_API(line) -> str:

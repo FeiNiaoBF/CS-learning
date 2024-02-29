@@ -4,6 +4,13 @@ import (
 	"GoAlgo/array"
 	"testing"
 )
+func TestMaint (t *testing.T) {
+	TestArray_Insert(t)
+	TestArray_Delete(t)
+	TestArray_Find(t)
+	TestPrint(t)
+}
+
 
 func TestArray_Insert(t *testing.T) {
 
