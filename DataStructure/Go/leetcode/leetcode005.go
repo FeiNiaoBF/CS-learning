@@ -14,7 +14,7 @@ func majorityElement(nums []int) int {
 	// for k, v := range m {
 	// 	if v > l/2 {
 	// 		return k
-	// 	}
+	// 	}s
 	// }
 	// return 0
 	count := 0
@@ -32,4 +32,5 @@ func majorityElement(nums []int) int {
 		}
 	}
 	return num
+
 }
